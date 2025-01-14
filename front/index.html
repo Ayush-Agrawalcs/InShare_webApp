@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Sharing</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <header class="header">
+        <img src="logo.png" alt="InShare Logo" class="logo">
+    </header>
+
+    <div class="container">
+        <div class="upload-box" id="drop-area">
+            <img src="Screenshot 2025-01-12 170247.png" alt="File Icon" class="file-icon" id="icon1">
+            <img src="Screenshot 2025-01-12 170247.png" alt="File Icon" class="file-icon hidden" id="icon2">
+            <img src="Screenshot 2025-01-12 170247.png" alt="File Icon" class="file-icon hidden" id="icon3">
+            <p>Drop your Files here or, <a href="#" id="browse-link">browse</a></p>
+            <input type="file" id="file-input" hidden>
+        </div>
+        
+        <div class="link-section" id="link-section" style="display: none;">
+            <p>Link expires in 24 hrs</p>
+            <div class="link-box">
+                <input type="text" readonly id="generated-link" class="link-input">
+                <button class="copy-button" onclick="copyLink()">📋</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
