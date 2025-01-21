@@ -1,24 +1,45 @@
-const dropArea = document.getElementById("drop-area");
+const dropArea = document.querySelector(".upload-box");
 const fileInput = document.getElementById("file-input");
-const linkSection = document.getElementById("link-section");
+const linkSection = document.querySelector(".link-section");
 const generatedLink = document.getElementById("generated-link");
+
+const bgprogress = document.querySelector(".bg-progress");
+const progressbar = document.querySelector(".progress-bar");
+const progressContainer = document.querySelector(".progress-container");
+const percentDiv=document.querySelector("#percent");
+
+// const host = "https://innshare.herokuapp.com/";
+// const uploadURL = `${host}api/files`;
 
 // Drag and Drop Events
 dropArea.addEventListener("dragover", (event) => {
-    event.preventDefault();
-    dropArea.style.borderColor = "#1a73e8";
+    event.preventDefault();  // Allow drop
+    dropArea.classList.add("dragged");
 });
 
 dropArea.addEventListener("dragleave", () => {
-    dropArea.style.borderColor = "#a3c9ff";
+    dropArea.classList.remove("dragged");
 });
 
 dropArea.addEventListener("drop", (event) => {
-    event.preventDefault();
-    dropArea.style.borderColor = "#a3c9ff";
-    const file = event.dataTransfer.files[0];
-    if (file) {
-        uploadFile(file);
+    event.preventDefault();  // Prevent the default behavior of the drop (e.g., opening the file)
+    dropArea.classList.remove("dragged");
+
+    console.log("Drop event triggered");
+    console.log(event);
+    console.log("DataTransfer items:", event.dataTransfer.items);
+    console.log("DataTransfer files:", event.dataTransfer.files);
+
+    // Get the dropped files
+    const files = event.dataTransfer.files;
+    console.log("Dropped files detected:", files);
+
+    // If valid files are detected, trigger the file upload
+    if (files.length > 0) {
+        fileInput.files = files;  
+        uploadFile(files); 
+    } else {
+        console.log("No valid files detected in dataTransfer.files.");
     }
 });
 
@@ -28,47 +49,84 @@ document.getElementById("browse-link").addEventListener("click", () => {
 });
 
 fileInput.addEventListener("change", (event) => {
-    const file = event.target.files[0];
-    if (file) {
-        uploadFile(file);
+    const files = event.target.files;
+    if (files.length > 0) {
+        uploadFile(files);  
     }
 });
 
-// Upload File (Simulate Link Generation)
-function uploadFile(file) {
-    // Simulate a server response with a generated link
-    const fileName = encodeURIComponent(file.name);
-    const fakeLink = `https://example.com/files/${fileName}`;
-    showGeneratedLink(fakeLink);
-    // Trigger icon transition
-    transitionIcons();
-}
+// Function to handle the file upload simulation (progress bar)
+const uploadFile = (files) => {
+    progressContainer.style.display="block";
+    const file = files[0];  
+    const formData = new FormData();
+    formData.append("myfile", file);
+    
+   
+   
+   simulateUpload(file);  
+   
 
-// Display the Generated Link
-function showGeneratedLink(link) {
+    // Below code would handle the real upload to the server if needed:
+    /*
+    const xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = () => {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            console.log(xhr.response);
+        }
+    };
+
+    xhr.upload.onprogress = updateProgress;  // Use the real progress event
+    xhr.open("POST", uploadURL);
+    xhr.send(formData);
+    */
+};
+
+// Simulate fake upload (progress bar)
+const simulateUpload = (file) => {
+    console.log("Uploading file:", file.name);
+    let progress = 0;
+
+    const interval = setInterval(() => {
+        // Randomly increase progress between 5 and 20 each time
+        const randomIncrement = Math.floor(Math.random() * 16) + 5;  // Random value between 5 and 20
+        progress += randomIncrement;
+
+        
+        if (progress > 100) {
+            progress = 100;
+        }
+
+        // Update the progress bar width
+        bgprogress.style.width = `${progress}%`;
+
+        
+        percentDiv.innerHTML = `${progress}`;
+        progressbar.style.transform=`scaleX(${progress/100})`;
+
+        if (progress >= 100) {
+            clearInterval(interval);  
+            console.log("Upload complete!");
+            showGeneratedLink(`https://example.com/files/${encodeURIComponent(file.name)}`); // Show the link section after "upload" completion
+        }
+    }, Math.random() * 500 + 300);  // Randomize the interval time between 300ms and 800ms
+    
+};
+
+const showGeneratedLink=(link)=> {
     generatedLink.value = link;
     linkSection.style.display = "block";
 }
 
-// Copy Link to Clipboard
 function copyLink() {
     generatedLink.select();
     document.execCommand("copy");
     alert("Link copied to clipboard!");
 }
 
-// Transition Icons
-function transitionIcons() {
-    // Hide the first icon
-    document.getElementById("icon1").classList.add("hidden");
-    
-    // Show the second and third icons with a smooth transition
-    document.getElementById("icon2").classList.remove("hidden");
-    document.getElementById("icon3").classList.remove("hidden");
-
-    // Optionally, you can change opacity or transition styles
-    setTimeout(() => {
-        document.getElementById("icon2").style.opacity = 1;
-        document.getElementById("icon3").style.opacity = 1;
-    }, 500);
-}
+// Simulate file upload progress update
+const updateProgress = (e) => {
+    const percent = Math.round((e.loaded / e.total) * 100);
+    console.log(percent);
+    bgprogress.style.width = `${percent}%`;
+};

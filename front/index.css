@@ -1,7 +1,7 @@
 /* Global Styles */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f5f8ff;
+    background-color: #e5ecfb;
     margin: 0;
     padding: 0;
 }
@@ -34,23 +34,70 @@ body {
 
 /* Upload Box */
 .upload-box {
-    border: 2px dashed #a3c9ff;
+    border: 2px dashed #a3c9ff; /* Drag-and-drop outline */
     border-radius: 10px;
     padding: 30px;
     margin-bottom: 20px;
     background-color: #f9fbff;
     position: relative;
+    transition: all 0.2s ease;
+    cursor: pointer; /* Indicates interactivity */
+    z-index: 10; /* Ensures it's above other elements */
 }
 
-.file-icon {
-    height: 50px;
-    margin-bottom: 10px;
-    opacity: 0; /* Start hidden */
-    transition: opacity 0.5s ease;
+.dragged.upload-box {
+    background-color: #e5ecfb; /* Visual feedback */
+    border-color: #1a73e8;
 }
+
+/* Image Container (inside .upload-box) */
+.image-container {
+    width: 250px;
+    height: 80px;
+    position: relative;
+    pointer-events: none; /* Prevent interference with drag events */
+}
+
+.image-container img {
+    width: 75px;
+    position: absolute;
+    transform-origin: bottom;
+    transition: transform 250ms ease-in-out;
+    pointer-events: none; /* Prevent image from capturing events */
+}
+
+.image-container .center {
+    z-index: 2;
+}
+
+.image-container .right,
+.image-container .left {
+    filter: grayscale(0.5);
+    transform: scale(0.9);
+}
+
+.image-container .right, .image-container .left{
+    filter:grayscale(.5);
+    transform:scale(0.9);
+}
+
+.dragged .image-container .right{
+    transform: rotate(10deg) translate(20px) scale(.9);
+}
+
+.dragged .image-container .left{
+    transform: rotate(-10deg) translate(-20px) scale(.9);
+}
+
+.dragged .image-container .center{
+    transform: translateY(-3px);
+
+}
+
+
 
 .upload-box p {
-    margin: 0;
+    margin: 4px;
     color: #555;
 }
 
@@ -61,11 +108,73 @@ body {
     cursor: pointer;
 }
 
-/* Link Section */
-.link-section p {
-    margin: 0 0 10px;
-    color: #555;
+.progress-container{
+    width:400px;
+    height:70px;
+    border: 2px solid #e5ecfb;
+    border-radius: 10px;
+    position: relative;
+    display: none;
+    
+
 }
+
+.progress-container .bg-progress{
+    background:#e5ecfb;
+    border-radius: 4%;
+    width:0%;
+    height: 100%;
+    transform-origin: left;
+    transition: width .25s linear;
+    position: absolute;
+   
+    /* padding:0px 10px; */
+    
+}
+/* 
+.title{
+    text-align: left;
+    margin-top: 10px;
+    padding: 0px 10px;
+}
+
+.percent-container{
+    
+    padding: 0px 10px;
+} */
+
+.progress-container .inner-container{
+    text-align:left;
+    position:absolute;
+    z-index: 1;
+    margin:10px 15px;
+    width:93%;
+
+}
+
+
+.percent-container
+{
+    font-size: 13px;
+    opacity: 65%;
+    margin:5px;
+}
+
+
+.progress-bar{
+    height: 3px;
+    width:100%;
+    background: #1a73e8;
+    transform-origin: left;
+    transform:scaleX(0);
+    transition: transform .25s linear;
+}
+
+/* Link Section */
+ .link-section p {
+         margin: 10px 10px;
+     color: #555;
+ }
 
 .link-box {
     display: flex;
@@ -74,31 +183,28 @@ body {
     border: 1px solid #ddd;
     border-radius: 5px;
     padding: 5px 10px;
-    background-color: #f9fbff;
+    background-color: #f9fbff; 
 }
 
-.link-input {
-    border: none;
-    background: none;
-    outline: none;
+ .link-input {   
+      border: none;     
+      background: none;     
+      outline: none;
     width: 100%;
-    font-size: 14px;
-    color: #333;
-}
+    font-size: 14px;    
+     color: #333; }
 
-.copy-button {
-    background: #1a73e8;
-    color: white;
-    border: none;
-    border-radius: 3px;
-    padding: 5px 10px;
-    cursor: pointer;
-    font-size: 14px;
-}
+ .copy-button {
+     background: #1a73e8;
+     color: white;
+     border: none;
+     border-radius: 3px;
+     padding: 5px 10px;
+     cursor: pointer;
+     font-size: 14px;
+ }
 
-/* Add a class for hiding the icons */
-.hidden {
-    display: none;
-}
-
-/* Add transition to file icons fo
+ /* Add a class for hiding the icons */
+ .hidden {
+     display: none;
+ }

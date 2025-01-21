@@ -1,13 +1,12 @@
-import { useState } from 'react'
-import './App.css'
+import React from 'react';
+import DragAndDropUpload from './Components/draganddropoutfile';
 
-function App() {
-  const [count, setCount] = useState(0)
-
+const App = () => {
   return (
-    <>
-    </>
-  )
-}
+    <div>
+      "hello"
+    </div>
+  );
+};
 
-export default App
+export default App;
